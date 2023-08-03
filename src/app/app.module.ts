@@ -7,20 +7,17 @@ import { NavComponent } from './nav/nav.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeComponent } from './home/home.component';
 import { AuthComponent } from './auth/auth.component';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    NavComponent,
-    HomeComponent,
-    AuthComponent
-  ],
+  declarations: [AppComponent, NavComponent, HomeComponent, AuthComponent],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
+    BsDropdownModule.forRoot(),
     AppRoutingModule,
-    BrowserAnimationsModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
