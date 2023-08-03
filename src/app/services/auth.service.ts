@@ -12,11 +12,6 @@ import {
 import {
   Firestore,
   doc,
-  addDoc,
-  collection,
-  DocumentData,
-  getDocs,
-  getDoc,
   setDoc,
   DocumentReference,
 } from '@angular/fire/firestore';

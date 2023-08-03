@@ -1,1 +1,24 @@
-<p>shop-home-page works!</p>
+<div class="collections-overview">
+  <div
+    class="collection-preview"
+    *ngFor="let category of categoryService.categories | async"
+  >
+    <h2 class="title">{{ category.title }}</h2>
+    <div class="preview">
+      <div
+        class="collection-item"
+        *ngFor="let item of category.items.slice(0, 4)"
+      >
+        <div
+          class="image"
+          [ngStyle]="{ 'background-image': 'url(' + item.imageUrl + ')' }"
+        ></div>
+        <div class="collection-footer">
+          <span class="name">{{ item.name }}</span>
+          <span class="price">{{ item.price | currency }}</span>
+        </div>
+        <button class="app-form-button custom-button">Add to cart</button>
+      </div>
+    </div>
+  </div>
+</div>
