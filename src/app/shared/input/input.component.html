@@ -1,0 +1,29 @@
+<div class="app-form-group">
+  <label
+    class="app-form-input-label"
+    [ngClass]="{ shrink: control.value }"
+    [for]="id"
+    >{{ name }}</label
+  >
+  <input
+    class="app-form-input"
+    [id]="id"
+    [type]="type"
+    [formControl]="control"
+  />
+  <span *ngIf="control.touched && control.errors">
+    <p class="errorMessage" *ngIf="control.errors['required']">
+      Field is required
+    </p>
+    <p class="errorMessage" *ngIf="control.errors['minlength']">
+      Minimum length is
+      {{ control.errors["minlength"]["requiredLength"] }}
+    </p>
+    <p class="errorMessage" *ngIf="control.errors['email']">
+      Please enter a valid email
+    </p>
+    <p class="errorMessage" *ngIf="control.errors['passwordMismatch']">
+      Passwords do not match
+    </p>
+  </span>
+</div>

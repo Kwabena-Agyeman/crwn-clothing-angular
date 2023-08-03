@@ -1,25 +1,41 @@
 <div className="sign-up">
   <h2 className="title">I do not have an account</h2>
   <span>Sign up with your email and password</span>
-  <form className="sign-up-form">
-    <div class="app-form-group">
-      <label class="app-form-input-label shrink" for="email">DisplayName</label>
-      <input class="app-form-input" id="email" type="email" name="email" />
-    </div>
-    <div class="app-form-group">
-      <label class="app-form-input-label shrink" for="email">Email</label>
-      <input class="app-form-input" id="email" type="email" name="email" />
-    </div>
-    <div class="app-form-group">
-      <label class="app-form-input-label shrink" for="email">Password</label>
-      <input class="app-form-input" id="email" type="email" name="email" />
-    </div>
-    <div class="app-form-group">
-      <label class="app-form-input-label shrink" for="email"
-        >Confirm Password</label
-      >
-      <input class="app-form-input" id="email" type="email" name="email" />
-    </div>
-    <Button class="app-form-button" type="submit">SIGN UP</Button>
+  <form
+    className="sign-up-form"
+    [formGroup]="registrationForm"
+    (ngSubmit)="onSubmit()"
+  >
+    <app-input
+      [control]="registrationForm.controls.displayName"
+      [id]="'displayName'"
+      [name]="'DisplayName'"
+      [type]="'text'"
+    ></app-input>
+    <app-input
+      [control]="registrationForm.controls.email"
+      [id]="'registerEmail'"
+      [name]="'Email'"
+      [type]="'email'"
+    ></app-input>
+    <app-input
+      [control]="registrationForm.controls.password"
+      [id]="'registerPassword'"
+      [name]="'Password'"
+      [type]="'password'"
+    ></app-input>
+    <app-input
+      [control]="registrationForm.controls.confirmPassword"
+      [id]="'confirmPassword'"
+      [name]="'Confirm Password'"
+      [type]="'password'"
+    ></app-input>
+
+    <Button
+      class="app-form-button"
+      [disabled]="registrationForm.invalid"
+      type="submit"
+      >SIGN UP</Button
+    >
   </form>
 </div>
