@@ -61,7 +61,11 @@
             }}</a>
           </li>
           <li class="nav-item" *ngIf="authService.user | async">
-            <a class="nav-link" (click)="onSignOut()"
+            <a
+              class="nav-link"
+              routerLink="/checkout"
+              routerLinkActive="active-link"
+              [routerLinkActiveOptions]="{ exact: true }"
               >{{ "Checkout" | uppercase }}
               <ng-container *ngIf="cartService.cart | async as cartItems">
                 <!-- Display the length of the cartItems array -->

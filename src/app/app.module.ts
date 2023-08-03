@@ -23,6 +23,8 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 
 import { environment } from 'src/environments/environment.development';
+import { CheckoutComponent } from './checkout/checkout.component';
+import { CheckoutItemComponent } from './checkout-item/checkout-item.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +36,8 @@ import { environment } from 'src/environments/environment.development';
     RegisterComponent,
     InputComponent,
     ContactComponent,
+    CheckoutComponent,
+    CheckoutItemComponent,
   ],
   imports: [
     BrowserModule,

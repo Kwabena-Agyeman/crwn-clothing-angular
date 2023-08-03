@@ -1,0 +1,29 @@
+<div class="checkout-item">
+  <div class="image-container">
+    <img [src]="checkOutItem.imageUrl" alt="item" />
+  </div>
+  <span class="name">{{ checkOutItem.name }}</span>
+  <span class="quantity">
+    <div
+      class="arrow"
+      (click)="cartService.decreaseQuantity(checkOutItem.name)"
+    >
+      &#10094;
+    </div>
+    <span class="value">{{ checkOutItem.quantity }}</span>
+
+    <div
+      class="arrow"
+      (click)="cartService.increaseQuantity(checkOutItem.name)"
+    >
+      &#10095;
+    </div>
+  </span>
+  <span class="price">{{ checkOutItem.price }}</span>
+  <div
+    class="remove-button"
+    (click)="cartService.removeFromCart(checkOutItem.name)"
+  >
+    &#10005;
+  </div>
+</div>

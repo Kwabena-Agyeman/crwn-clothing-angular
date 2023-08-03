@@ -7,7 +7,9 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class CartService {
   private cartSource = new BehaviorSubject<ICartItem[]>([]);
+  private totalSource = new BehaviorSubject<number>(0);
   cart = this.cartSource.asObservable();
+  cartTotal = this.totalSource.asObservable();
 
   constructor() {}
 
@@ -25,6 +27,8 @@ export class CartService {
       currentCartItems.push(item);
     }
 
+    const updatedTotal = this.calculateTotal(currentCartItems);
+    this.totalSource.next(updatedTotal);
     this.cartSource.next(currentCartItems);
   }
 
@@ -36,7 +40,50 @@ export class CartService {
 
     if (existingItemIndex !== -1) {
       currentCartItems.splice(existingItemIndex, 1);
+
+      const updatedTotal = this.calculateTotal(currentCartItems);
+      this.totalSource.next(updatedTotal);
       this.cartSource.next(currentCartItems);
     }
+  }
+
+  increaseQuantity(itemName: string) {
+    const currentCartItems = this.cartSource.getValue();
+    const itemToUpdate = currentCartItems.find(
+      (cartItem) => cartItem.name === itemName
+    );
+
+    if (itemToUpdate) {
+      itemToUpdate.quantity += 1;
+      const updatedTotal = this.calculateTotal(currentCartItems);
+      this.cartSource.next(currentCartItems);
+      this.totalSource.next(updatedTotal);
+    }
+  }
+
+  decreaseQuantity(itemName: string) {
+    const currentCartItems = this.cartSource.getValue();
+    const itemToUpdate = currentCartItems.find(
+      (cartItem) => cartItem.name === itemName
+    );
+
+    if (itemToUpdate) {
+      if (itemToUpdate.quantity === 1) {
+        // If the quantity is 1, remove the item from the cart
+        this.removeFromCart(itemName);
+      } else {
+        itemToUpdate.quantity -= 1;
+        const updatedTotal = this.calculateTotal(currentCartItems);
+        this.cartSource.next(currentCartItems);
+        this.totalSource.next(updatedTotal);
+      }
+    }
+  }
+
+  private calculateTotal(cartItems: ICartItem[]): number {
+    return cartItems.reduce(
+      (total, item) => total + item.quantity * item.price,
+      0
+    );
   }
 }
