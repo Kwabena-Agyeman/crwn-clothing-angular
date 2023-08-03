@@ -25,6 +25,7 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
 import { environment } from 'src/environments/environment.development';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { CheckoutItemComponent } from './checkout-item/checkout-item.component';
+import { StripePaymentComponent } from './stripe-payment/stripe-payment.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { CheckoutItemComponent } from './checkout-item/checkout-item.component';
     ContactComponent,
     CheckoutComponent,
     CheckoutItemComponent,
+    StripePaymentComponent,
   ],
   imports: [
     BrowserModule,
