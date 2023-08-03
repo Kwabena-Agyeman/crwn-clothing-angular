@@ -12,15 +12,17 @@ import { AuthComponent } from './auth/auth.component';
 import { SigninComponent } from './auth/signin/signin.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { InputComponent } from './shared/input/input.component';
+import { ContactComponent } from './contact/contact.component';
 
+import { ShopModule } from './shop/shop.module';
 import { BootstrapModule } from './bootstrap/bootstrap.module';
 import { ToastrModule } from 'ngx-toastr';
 
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { provideAuth, getAuth } from '@angular/fire/auth';
+
 import { environment } from 'src/environments/environment.development';
-import { ContactComponent } from './contact/contact.component';
 
 @NgModule({
   declarations: [
@@ -38,8 +40,9 @@ import { ContactComponent } from './contact/contact.component';
     ReactiveFormsModule,
     BrowserAnimationsModule,
     BootstrapModule,
-    ToastrModule.forRoot(),
+    ShopModule,
     AppRoutingModule,
+    ToastrModule.forRoot(),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
