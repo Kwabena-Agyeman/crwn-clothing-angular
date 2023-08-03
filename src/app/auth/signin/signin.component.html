@@ -2,23 +2,24 @@
   <h2>I already have an account</h2>
   <span>Sign in with your email and password</span>
 
-  <form>
-    <div class="app-form-group">
-      <label class="app-form-input-label shrink" for="email">Email</label>
-      <input class="app-form-input" id="email" type="email" name="email" />
-    </div>
-    <div class="app-form-group">
-      <label class="app-form-input-label shrink" for="password">Password</label>
-      <input
-        class="app-form-input"
-        id="password"
-        type="password"
-        name="password"
-      />
-    </div>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <app-input
+      [control]="loginForm.controls.email"
+      [id]="'loginEmail'"
+      [name]="'Email'"
+      [type]="'email'"
+    ></app-input>
+    <app-input
+      [control]="loginForm.controls.password"
+      [id]="'loginPassword'"
+      [name]="'Password'"
+      [type]="'password'"
+    ></app-input>
 
     <div className="buttons">
-      <Button class="app-form-button">Sign In</Button>
+      <Button [disabled]="loginForm.invalid" class="app-form-button"
+        >Sign In</Button
+      >
     </div>
   </form>
 </div>
