@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import ICartItem from '../models/cart-item.interface';
 import { BehaviorSubject } from 'rxjs';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,8 +11,15 @@ export class CartService {
   private totalSource = new BehaviorSubject<number>(0);
   cart = this.cartSource.asObservable();
   cartTotal = this.totalSource.asObservable();
+  CART_STORAGE_KEY = `crwn-clothing-app ${this.authService.currentUser}`;
 
-  constructor() {}
+  constructor(private authService: AuthService) {
+    const storedCart = localStorage.getItem(this.CART_STORAGE_KEY);
+    if (storedCart) {
+      this.cartSource.next(JSON.parse(storedCart));
+      this.updateTotal();
+    }
+  }
 
   addToCart(item: ICartItem) {
     const currentCartItems = this.cartSource.getValue();
@@ -27,9 +35,9 @@ export class CartService {
       currentCartItems.push(item);
     }
 
-    const updatedTotal = this.calculateTotal(currentCartItems);
-    this.totalSource.next(updatedTotal);
     this.cartSource.next(currentCartItems);
+    this.updateTotal();
+    this.saveCartToLocalStorage(currentCartItems);
   }
 
   removeFromCart(itemName: string) {
@@ -41,9 +49,9 @@ export class CartService {
     if (existingItemIndex !== -1) {
       currentCartItems.splice(existingItemIndex, 1);
 
-      const updatedTotal = this.calculateTotal(currentCartItems);
-      this.totalSource.next(updatedTotal);
       this.cartSource.next(currentCartItems);
+      this.updateTotal();
+      this.saveCartToLocalStorage(currentCartItems);
     }
   }
 
@@ -55,9 +63,9 @@ export class CartService {
 
     if (itemToUpdate) {
       itemToUpdate.quantity += 1;
-      const updatedTotal = this.calculateTotal(currentCartItems);
       this.cartSource.next(currentCartItems);
-      this.totalSource.next(updatedTotal);
+      this.updateTotal();
+      this.saveCartToLocalStorage(currentCartItems);
     }
   }
 
@@ -73,9 +81,9 @@ export class CartService {
         this.removeFromCart(itemName);
       } else {
         itemToUpdate.quantity -= 1;
-        const updatedTotal = this.calculateTotal(currentCartItems);
         this.cartSource.next(currentCartItems);
-        this.totalSource.next(updatedTotal);
+        this.updateTotal();
+        this.saveCartToLocalStorage(currentCartItems);
       }
     }
   }
@@ -85,5 +93,15 @@ export class CartService {
       (total, item) => total + item.quantity * item.price,
       0
     );
+  }
+
+  private updateTotal() {
+    const currentCartItems = this.cartSource.getValue();
+    const updatedTotal = this.calculateTotal(currentCartItems);
+    this.totalSource.next(updatedTotal);
+  }
+
+  private saveCartToLocalStorage(cartItems: ICartItem[]) {
+    localStorage.setItem(this.CART_STORAGE_KEY, JSON.stringify(cartItems));
   }
 }

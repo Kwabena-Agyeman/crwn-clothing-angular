@@ -33,6 +33,10 @@ export class AuthService {
     this.user = user(this.auth);
   }
 
+  get currentUser() {
+    return this.auth.currentUser?.uid;
+  }
+
   async createUser(userData: IUser) {
     const { email, displayName, password } = userData;
 
