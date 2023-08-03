@@ -16,6 +16,11 @@ import { InputComponent } from './shared/input/input.component';
 import { BootstrapModule } from './bootstrap/bootstrap.module';
 import { ToastrModule } from 'ngx-toastr';
 
+import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { provideAuth, getAuth } from '@angular/fire/auth';
+import { environment } from 'src/environments/environment.development';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,6 +38,9 @@ import { ToastrModule } from 'ngx-toastr';
     BootstrapModule,
     ToastrModule.forRoot(),
     AppRoutingModule,
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideAuth(() => getAuth()),
+    provideFirestore(() => getFirestore()),
   ],
   providers: [],
   bootstrap: [AppComponent],
