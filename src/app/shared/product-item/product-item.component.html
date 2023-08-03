@@ -7,5 +7,7 @@
     <span class="name">{{ item.name }}</span>
     <span class="price">{{ item.price | currency }}</span>
   </div>
-  <button class="app-form-button custom-button">Add to cart</button>
+  <button (click)="clicked.emit(item)" class="app-form-button custom-button">
+    Add to cart
+  </button>
 </div>

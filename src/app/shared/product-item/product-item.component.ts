@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import ICategory from 'src/app/models/category.interface';
 
 @Component({
@@ -8,4 +8,5 @@ import ICategory from 'src/app/models/category.interface';
 })
 export class ProductItemComponent {
   @Input() item?: ICategory;
+  @Output() clicked = new EventEmitter();
 }

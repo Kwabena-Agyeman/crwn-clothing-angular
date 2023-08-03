@@ -14,6 +14,7 @@
       <app-product-item
         *ngFor="let item of category.items.slice(0, 4)"
         [item]="item"
+        (clicked)="onAddToCart($event)"
       ></app-product-item>
     </div>
   </div>

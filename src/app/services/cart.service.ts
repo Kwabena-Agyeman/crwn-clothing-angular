@@ -7,7 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class CartService {
   private cartSource = new BehaviorSubject<ICartItem[]>([]);
-  categories = this.cartSource.asObservable();
+  cart = this.cartSource.asObservable();
 
   constructor() {}
 
