@@ -4,6 +4,8 @@
 /* Importing Datepicker SCSS file. */
 @import "node_modules/ngx-bootstrap/datepicker/bs-datepicker";
 
+@import "ngx-toastr/toastr";
+
 input.ng-invalid.ng-touched {
   border-bottom: 1px red solid;
 }

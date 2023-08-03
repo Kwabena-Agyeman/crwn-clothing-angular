@@ -11,9 +11,10 @@ import { HomeComponent } from './home/home.component';
 import { AuthComponent } from './auth/auth.component';
 import { SigninComponent } from './auth/signin/signin.component';
 import { RegisterComponent } from './auth/register/register.component';
+import { InputComponent } from './shared/input/input.component';
 
 import { BootstrapModule } from './bootstrap/bootstrap.module';
-import { InputComponent } from './shared/input/input.component';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { InputComponent } from './shared/input/input.component';
     ReactiveFormsModule,
     BrowserAnimationsModule,
     BootstrapModule,
+    ToastrModule.forRoot(),
     AppRoutingModule,
   ],
   providers: [],
