@@ -32,10 +32,12 @@
     ></app-input>
 
     <Button
+      *ngIf="!isLoading"
       class="app-form-button"
       [disabled]="registrationForm.invalid"
       type="submit"
       >SIGN UP</Button
     >
+    <span *ngIf="isLoading" class="app-spinner-loader"></span>
   </form>
 </div>

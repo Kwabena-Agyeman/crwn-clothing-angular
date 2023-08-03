@@ -16,12 +16,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent {
-  constructor(
-    private authService: AuthService,
-    private toast: ToastrService,
-    private router: Router
-  ) {}
-
+  isLoading = false;
   registrationForm = new FormGroup(
     {
       displayName: new FormControl('', [
@@ -37,6 +32,12 @@ export class RegisterComponent {
     },
     [this.passwordMismatch]
   );
+
+  constructor(
+    private authService: AuthService,
+    private toast: ToastrService,
+    private router: Router
+  ) {}
 
   private passwordMismatch(
     control: AbstractControl
@@ -55,6 +56,7 @@ export class RegisterComponent {
   async onSubmit() {
     if (this.registrationForm.invalid) return;
 
+    this.isLoading = true;
     try {
       const { displayName, email, password } = this.registrationForm.value;
       await this.authService.createUser({
@@ -63,14 +65,16 @@ export class RegisterComponent {
         password: password!,
       });
       this.toast.success('Registration successful');
+      this.isLoading = false;
       this.router.navigateByUrl('/');
     } catch (error) {
       console.error(error);
       if (error instanceof FirebaseError) {
         this.toast.warning(error.code);
-        return;
+      } else {
+        this.toast.error('Something went wrong');
       }
-      this.toast.error('Something went wrong');
+      this.isLoading = false;
     }
   }
 }

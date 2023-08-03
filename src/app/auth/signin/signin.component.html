@@ -17,9 +17,13 @@
     ></app-input>
 
     <div className="buttons">
-      <Button [disabled]="loginForm.invalid" class="app-form-button"
-        >Sign In</Button
-      >
+      <Button
+        *ngIf="!isLoading"
+        [disabled]="loginForm.invalid"
+        class="app-form-button"
+        ><span>Signin</span>
+      </Button>
+      <span *ngIf="isLoading" class="app-spinner-loader"></span>
     </div>
   </form>
 </div>
