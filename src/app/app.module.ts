@@ -9,9 +9,11 @@ import { HomeComponent } from './home/home.component';
 import { AuthComponent } from './auth/auth.component';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { SigninComponent } from './auth/signin/signin.component';
+import { RegisterComponent } from './auth/register/register.component';
 
 @NgModule({
-  declarations: [AppComponent, NavComponent, HomeComponent, AuthComponent],
+  declarations: [AppComponent, NavComponent, HomeComponent, AuthComponent, SigninComponent, RegisterComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
