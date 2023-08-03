@@ -16,3 +16,9 @@ a {
   text-decoration: none;
   color: black;
 }
+
+a.active-link {
+  color: black;
+  font-weight: bolder;
+  text-decoration: underline;
+}
