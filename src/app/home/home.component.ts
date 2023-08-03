@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -40,4 +41,10 @@ export class HomeComponent {
       size: 'large',
     },
   ];
+
+  constructor(private router: Router) {}
+
+  navigateToCategory(title: string) {
+    this.router.navigateByUrl(`/shop/${title}`);
+  }
 }

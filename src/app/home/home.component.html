@@ -4,6 +4,7 @@
       class="menu-item"
       [ngClass]="{ large: category.size }"
       *ngFor="let category of categories"
+      (click)="navigateToCategory(category.title)"
     >
       <div
         class="background-image"

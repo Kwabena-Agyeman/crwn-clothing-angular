@@ -1,0 +1,11 @@
+<div class="product-item" *ngIf="item">
+  <div
+    class="image"
+    [ngStyle]="{ 'background-image': 'url(' + item.imageUrl + ')' }"
+  ></div>
+  <div class="product-footer">
+    <span class="name">{{ item.name }}</span>
+    <span class="price">{{ item.price | currency }}</span>
+  </div>
+  <button class="app-form-button custom-button">Add to cart</button>
+</div>

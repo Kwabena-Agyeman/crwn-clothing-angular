@@ -39,8 +39,6 @@ export class CategoriesService {
     querySnapshot.forEach((category) => {
       let data = category.data();
       categories.push(data);
-
-      console.log(categories);
     });
 
     this.categoriesSource.next(categories);
