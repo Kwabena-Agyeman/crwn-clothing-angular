@@ -5,6 +5,7 @@
       *ngFor="let item of items"
       style="margin-bottom: 10px"
       [item]="item"
+      (clicked)="onAddToCart(item)"
     ></app-product-item>
   </div>
 </div>

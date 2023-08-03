@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../services/auth.service';
+import { CartService } from '../services/cart.service';
 
 @Component({
   selector: 'app-nav',
@@ -9,7 +10,10 @@ import { AuthService } from '../services/auth.service';
 export class NavComponent {
   isCollapsed = true;
 
-  constructor(public authService: AuthService) {}
+  constructor(
+    public authService: AuthService,
+    public cartService: CartService
+  ) {}
 
   async onSignOut() {
     await this.authService.signOut();

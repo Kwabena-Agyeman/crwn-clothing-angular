@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import ICategory from 'src/app/models/category.interface';
+import { CartService } from 'src/app/services/cart.service';
 import { CategoriesService } from 'src/app/services/categories.service';
 
 @Component({
@@ -14,7 +15,8 @@ export class ShopCategoryPageComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private categoryService: CategoriesService
+    private categoryService: CategoriesService,
+    private cartService: CartService
   ) {
     this.route.params.subscribe((params) => {
       const id: string = params['id'];
@@ -33,5 +35,10 @@ export class ShopCategoryPageComponent implements OnInit {
         this.items = category.items;
       }
     });
+  }
+
+  onAddToCart(item: ICategory) {
+    const { id, imageUrl, name, price } = item;
+    this.cartService.addToCart({ name, price, imageUrl, quantity: 1 });
   }
 }
