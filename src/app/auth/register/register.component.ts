@@ -5,6 +5,10 @@ import {
   Validators,
   AbstractControl,
 } from '@angular/forms';
+import { AuthService } from 'src/app/services/auth.service';
+import { ToastrService } from 'ngx-toastr';
+import { FirebaseError } from '@angular/fire/app';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -12,6 +16,12 @@ import {
   styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent {
+  constructor(
+    private authService: AuthService,
+    private toast: ToastrService,
+    private router: Router
+  ) {}
+
   registrationForm = new FormGroup(
     {
       displayName: new FormControl('', [
@@ -21,7 +31,7 @@ export class RegisterComponent {
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [
         Validators.required,
-        Validators.minLength(4),
+        Validators.minLength(6),
       ]),
       confirmPassword: new FormControl('', [Validators.required]),
     },
@@ -42,7 +52,25 @@ export class RegisterComponent {
     } else return null;
   }
 
-  onSubmit() {
-    console.log(this.registrationForm.value);
+  async onSubmit() {
+    if (this.registrationForm.invalid) return;
+
+    try {
+      const { displayName, email, password } = this.registrationForm.value;
+      await this.authService.createUser({
+        displayName: displayName!,
+        email: email!,
+        password: password!,
+      });
+      this.toast.success('Registration successful');
+      this.router.navigateByUrl('/');
+    } catch (error) {
+      console.error(error);
+      if (error instanceof FirebaseError) {
+        this.toast.warning(error.code);
+        return;
+      }
+      this.toast.error('Something went wrong');
+    }
   }
 }

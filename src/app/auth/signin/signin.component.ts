@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  AbstractControl,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-signin',
@@ -13,10 +17,7 @@ export class SigninComponent {
     password: new FormControl('', [Validators.required]),
   });
 
-  constructor(private toastr: ToastrService) {}
-
   onSubmit() {
-    console.log(this.loginForm.value);
-    this.toastr.success('Login successful');
+    console.log(this.loginForm);
   }
 }

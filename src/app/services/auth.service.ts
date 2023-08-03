@@ -22,6 +22,7 @@ import {
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import IUser from '../models/user.interface';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -29,7 +30,11 @@ import IUser from '../models/user.interface';
 export class AuthService {
   user: Observable<User | null>;
 
-  constructor(private auth: Auth, private db: Firestore) {
+  constructor(
+    private auth: Auth,
+    private db: Firestore,
+    private router: Router
+  ) {
     this.user = user(this.auth);
   }
 
@@ -59,5 +64,18 @@ export class AuthService {
       displayName,
       email,
     });
+  }
+
+  async login(email: string, password: string) {
+    const userCredential = await signInWithEmailAndPassword(
+      this.auth,
+      email,
+      password
+    );
+  }
+
+  async signOut() {
+    await signOut(this.auth);
+    await this.router.navigateByUrl('/auth');
   }
 }
