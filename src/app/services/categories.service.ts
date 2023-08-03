@@ -24,7 +24,9 @@ export class CategoriesService {
   >([]);
   categories = this.categoriesSource.asObservable();
 
-  constructor(private db: Firestore) {}
+  constructor(private db: Firestore) {
+    this.fetchCategories();
+  }
 
   async fetchCategories() {
     const collectionRef = collection(

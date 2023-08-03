@@ -3,7 +3,13 @@
     class="collection-preview"
     *ngFor="let category of categoryService.categories | async"
   >
-    <h2 class="title">{{ category.title }}</h2>
+    <h2
+      style="font-size: 32px; cursor: pointer"
+      (click)="navigateToCategory(category.title)"
+      class="title"
+    >
+      {{ category.title }}
+    </h2>
     <div class="preview">
       <div
         class="collection-item"
