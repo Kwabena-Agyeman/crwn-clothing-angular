@@ -4,6 +4,7 @@ import { BehaviorSubject, Subject, catchError, tap, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import IUser from '../models/user.interface';
 import { CartService } from './cart.service';
+import { environment } from 'src/environments/environment';
 
 interface AuthResponseData {
   idToken: string;
@@ -23,11 +24,9 @@ export type AuthResponse = AuthResponseData | LoginResponseData;
   providedIn: 'root',
 })
 export class AuthService {
-  private signUpUrl =
-    'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAN8YwZY2r3k9pgIfENurO1sxUKnt-BrBA';
+  private signUpUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment.firebase.apiKey}`;
 
-  private loginUrl =
-    'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAN8YwZY2r3k9pgIfENurO1sxUKnt-BrBA';
+  private loginUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${environment.firebase.apiKey}`;
 
   userSource = new BehaviorSubject<IUser | null>(null);
   user = this.userSource.asObservable();

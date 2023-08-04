@@ -3,7 +3,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { BehaviorSubject } from 'rxjs';
 import ICategory from '../models/category.interface';
-import { environment } from 'src/environments/environment.development';
 
 const SHOP_DATA = {
   hats: {
