@@ -36,7 +36,6 @@ const environmentFileContent = `
       '${process.env.STRIPE_PUBLIC_KEY}',
   
   };
-  }
 `;
 
 writeFileUsingFS(targetPath, environmentFileContent); // appending data into the target file
