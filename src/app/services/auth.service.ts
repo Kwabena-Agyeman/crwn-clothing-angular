@@ -1,91 +1,125 @@
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  Auth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  updateProfile,
-  User,
-  user,
-  signOut,
-  onAuthStateChanged,
-  fetchSignInMethodsForEmail,
-} from '@angular/fire/auth';
-import {
-  Firestore,
-  doc,
-  setDoc,
-  DocumentReference,
-} from '@angular/fire/firestore';
-import { BehaviorSubject, Observable } from 'rxjs';
-import IUser from '../models/user.interface';
+import { BehaviorSubject, Subject, catchError, tap, throwError } from 'rxjs';
 import { Router } from '@angular/router';
+import IUser from '../models/user.interface';
 import { CartService } from './cart.service';
+
+interface AuthResponseData {
+  idToken: string;
+  email: string;
+  refreshToken: string;
+  expiresIn: string;
+  localId: string;
+}
+
+interface LoginResponseData extends AuthResponseData {
+  registered: boolean;
+}
+
+export type AuthResponse = AuthResponseData | LoginResponseData;
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private userSource = new BehaviorSubject<User | null>(null);
+  private signUpUrl =
+    'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAN8YwZY2r3k9pgIfENurO1sxUKnt-BrBA';
+
+  private loginUrl =
+    'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAN8YwZY2r3k9pgIfENurO1sxUKnt-BrBA';
+
+  userSource = new BehaviorSubject<IUser | null>(null);
   user = this.userSource.asObservable();
 
-  constructor(
-    private auth: Auth,
-    private db: Firestore,
-    private router: Router,
-    private cartService: CartService
-  ) {
-    onAuthStateChanged(this.auth, (user) => {
-      if (user) {
-        this.userSource.next(user);
-        this.cartService.fetchCartFromLocalStorage(user.uid);
-      } else {
-        this.userSource.next(null);
-      }
-    });
+  constructor(private http: HttpClient, private router: Router) {}
+
+  signUp(email: string, password: string) {
+    return this.http
+      .post<AuthResponseData>(this.signUpUrl, {
+        email: email,
+        password: password,
+        returnSecureToken: true,
+      })
+      .pipe(
+        tap((res) => {
+          this.userCreation(res);
+        }),
+        catchError((errorRes) => {
+          return this.handleError(errorRes);
+        })
+      );
   }
 
-  get currentUser() {
-    return this.auth.currentUser?.uid;
+  login(email: string, password: string) {
+    return this.http
+      .post<LoginResponseData>(this.loginUrl, {
+        email: email,
+        password: password,
+        returnSecureToken: true,
+      })
+      .pipe(
+        tap((res) => {
+          this.userCreation(res);
+        }),
+        catchError((errorRes) => {
+          return this.handleError(errorRes);
+        })
+      );
   }
 
-  async createUser(userData: IUser) {
-    const { email, displayName, password } = userData;
+  signOut() {
+    this.userSource.next(null);
+    localStorage.removeItem('crwn-clothing-token');
+    this.router.navigate(['/auth']);
+  }
 
-    if (!password) throw new Error('Please provide a password');
+  autoLogin() {
+    const userData = localStorage.getItem('crwn-clothing-token');
+    if (!userData) return;
 
-    const userCredential = await createUserWithEmailAndPassword(
-      this.auth,
-      email,
-      password
-    );
+    const user: IUser = JSON.parse(userData);
+    const isTokenValid = new Date() < new Date(user.tokenExpirationDate);
 
-    const user_uid = userCredential.user.uid;
-
-    if (this.auth.currentUser) {
-      await updateProfile(this.auth.currentUser, { displayName });
+    if (isTokenValid) {
+      this.userSource.next(user);
+    } else {
+      localStorage.removeItem('crwn-clothing-token');
     }
-
-    const docRef = doc(
-      this.db,
-      `users/${user_uid}`
-    ) as DocumentReference<IUser>;
-
-    await setDoc(docRef, {
-      displayName,
-      email,
-    });
   }
 
-  async login(email: string, password: string) {
-    const userCredential = await signInWithEmailAndPassword(
-      this.auth,
-      email,
-      password
+  private userCreation(data: AuthResponse) {
+    const expirationDate = new Date(
+      new Date().getTime() + +data.expiresIn * 1000
     );
+    const user: IUser = {
+      email: data.email,
+      id: data.localId,
+      token: data.idToken,
+      tokenExpirationDate: expirationDate,
+    };
+
+    this.userSource.next(user);
+    localStorage.setItem('crwn-clothing-token', JSON.stringify(user));
   }
 
-  async signOut() {
-    await signOut(this.auth);
-    await this.router.navigateByUrl('/auth');
+  private handleError(err: HttpErrorResponse) {
+    let errorMessage = 'An error occurred';
+    if (err?.error?.error?.message) {
+      switch (err.error.error.message) {
+        case 'EMAIL_EXISTS':
+          errorMessage = 'This email exists already';
+          break;
+        case 'EMAIL_NOT_FOUND':
+          errorMessage = 'This email does not exist';
+          break;
+        case 'INVALID_PASSWORD':
+          errorMessage = 'The password is invalid';
+          break;
+        default:
+          'Something went wrong, please try again';
+      }
+    }
+    return throwError(() => new Error(errorMessage));
   }
 }

@@ -14,13 +14,15 @@ export class CartService {
 
   constructor() {}
 
-  fetchCartFromLocalStorage(id: string) {
-    const CART_STORAGE_KEY = `crwn-clothing-app ${id}`;
-    this.userToken = id;
-    const storedCart = localStorage.getItem(CART_STORAGE_KEY);
+  fetchCartFromLocalStorage(token: string) {
+    this.userToken = token;
+    const cart_token = `crwn-clothing-cart-${this.userToken}`;
+    const storedCart = localStorage.getItem(cart_token);
     if (storedCart) {
       this.cartSource.next(JSON.parse(storedCart));
       this.updateTotal();
+    } else {
+      this.cartSource.next([]);
     }
   }
 
@@ -91,22 +93,21 @@ export class CartService {
     }
   }
 
-  private calculateTotal(cartItems: ICartItem[]): number {
-    return cartItems.reduce(
-      (total, item) => total + item.quantity * item.price,
-      0
-    );
-  }
-
   private updateTotal() {
     const currentCartItems = this.cartSource.getValue();
     const updatedTotal = this.calculateTotal(currentCartItems);
     this.totalSource.next(updatedTotal);
   }
 
+  private calculateTotal(cartItems: ICartItem[]): number {
+    return cartItems.reduce(
+      (total, item) => total + item.quantity * item.price,
+      0
+    );
+  }
   private saveCartToLocalStorage(cartItems: ICartItem[]) {
     localStorage.setItem(
-      `crwn-clothing-app ${this.userToken}`,
+      `crwn-clothing-cart-${this.userToken}`,
       JSON.stringify(cartItems)
     );
   }

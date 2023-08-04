@@ -23,22 +23,23 @@ export class SigninComponent {
     private router: Router
   ) {}
 
-  async onSubmit() {
+  onSubmit() {
     if (this.loginForm.invalid) return;
     this.isLoading = true;
-    try {
-      const { email, password } = this.loginForm.value;
-      await this.authService.login(email!, password!);
-      this.toast.success('Login successful');
-      this.router.navigateByUrl('/');
-      this.isLoading = false;
-    } catch (error) {
-      console.error(error);
-      if (error instanceof FirebaseError) {
-        this.toast.warning(error.code);
-      } else this.toast.error('Something went wrong');
 
-      this.isLoading = false;
-    }
+    const { email, password } = this.loginForm.value;
+
+    this.authService.login(email!, password!).subscribe(
+      (response) => {
+        this.toast.success('Login successful');
+        this.router.navigateByUrl('/');
+        this.isLoading = false;
+      },
+      (error) => {
+        console.error(error);
+        this.toast.warning(error);
+        this.isLoading = false;
+      }
+    );
   }
 }

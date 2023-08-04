@@ -53,28 +53,22 @@ export class RegisterComponent {
     } else return null;
   }
 
-  async onSubmit() {
+  onSubmit() {
     if (this.registrationForm.invalid) return;
-
     this.isLoading = true;
-    try {
-      const { displayName, email, password } = this.registrationForm.value;
-      await this.authService.createUser({
-        displayName: displayName!,
-        email: email!,
-        password: password!,
-      });
-      this.toast.success('Registration successful');
-      this.isLoading = false;
-      this.router.navigateByUrl('/');
-    } catch (error) {
-      console.error(error);
-      if (error instanceof FirebaseError) {
-        this.toast.warning(error.code);
-      } else {
-        this.toast.error('Something went wrong');
+
+    const { email, password } = this.registrationForm.value;
+    this.authService.signUp(email!, password!).subscribe(
+      (response) => {
+        this.toast.success('Registration successful');
+        this.router.navigateByUrl('/');
+        this.isLoading = false;
+      },
+      (error) => {
+        console.error(error);
+        this.toast.warning(error);
+        this.isLoading = false;
       }
-      this.isLoading = false;
-    }
+    );
   }
 }

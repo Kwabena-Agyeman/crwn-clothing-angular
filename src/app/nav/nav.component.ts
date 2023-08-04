@@ -15,7 +15,7 @@ export class NavComponent {
     public cartService: CartService
   ) {}
 
-  async onSignOut() {
-    await this.authService.signOut();
+  onSignOut() {
+    this.authService.signOut();
   }
 }

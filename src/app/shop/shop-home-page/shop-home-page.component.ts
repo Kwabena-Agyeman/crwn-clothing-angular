@@ -10,14 +10,12 @@ import { CategoriesService } from 'src/app/services/categories.service';
   templateUrl: './shop-home-page.component.html',
   styleUrls: ['./shop-home-page.component.scss'],
 })
-export class ShopHomePageComponent implements OnInit {
+export class ShopHomePageComponent {
   constructor(
     public categoryService: CategoriesService,
     private cartService: CartService,
     private router: Router
   ) {}
-
-  ngOnInit(): void {}
 
   navigateToCategory(title: string) {
     this.router.navigateByUrl(`/shop/${title}`);
