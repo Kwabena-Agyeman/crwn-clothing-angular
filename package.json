@@ -5,7 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "npm run env-config && ng build",
-    "env-config": "ts-node src/environments/set-env.ts",
+    "env-config": "ts-node src/setEnv.ts",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
