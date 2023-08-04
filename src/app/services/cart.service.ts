@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import ICartItem from '../models/cart-item.interface';
 import { BehaviorSubject } from 'rxjs';
-import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,10 +10,14 @@ export class CartService {
   private totalSource = new BehaviorSubject<number>(0);
   cart = this.cartSource.asObservable();
   cartTotal = this.totalSource.asObservable();
-  CART_STORAGE_KEY = `crwn-clothing-app ${this.authService.currentUser}`;
+  userToken = '';
 
-  constructor(private authService: AuthService) {
-    const storedCart = localStorage.getItem(this.CART_STORAGE_KEY);
+  constructor() {}
+
+  fetchCartFromLocalStorage(id: string) {
+    const CART_STORAGE_KEY = `crwn-clothing-app ${id}`;
+    this.userToken = id;
+    const storedCart = localStorage.getItem(CART_STORAGE_KEY);
     if (storedCart) {
       this.cartSource.next(JSON.parse(storedCart));
       this.updateTotal();
@@ -102,6 +105,9 @@ export class CartService {
   }
 
   private saveCartToLocalStorage(cartItems: ICartItem[]) {
-    localStorage.setItem(this.CART_STORAGE_KEY, JSON.stringify(cartItems));
+    localStorage.setItem(
+      `crwn-clothing-app ${this.userToken}`,
+      JSON.stringify(cartItems)
+    );
   }
 }

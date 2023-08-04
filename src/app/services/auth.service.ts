@@ -7,6 +7,7 @@ import {
   User,
   user,
   signOut,
+  onAuthStateChanged,
   fetchSignInMethodsForEmail,
 } from '@angular/fire/auth';
 import {
@@ -15,22 +16,32 @@ import {
   setDoc,
   DocumentReference,
 } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import IUser from '../models/user.interface';
 import { Router } from '@angular/router';
+import { CartService } from './cart.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  user: Observable<User | null>;
+  private userSource = new BehaviorSubject<User | null>(null);
+  user = this.userSource.asObservable();
 
   constructor(
     private auth: Auth,
     private db: Firestore,
-    private router: Router
+    private router: Router,
+    private cartService: CartService
   ) {
-    this.user = user(this.auth);
+    onAuthStateChanged(this.auth, (user) => {
+      if (user) {
+        this.userSource.next(user);
+        this.cartService.fetchCartFromLocalStorage(user.uid);
+      } else {
+        this.userSource.next(null);
+      }
+    });
   }
 
   get currentUser() {

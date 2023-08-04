@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -41,6 +42,8 @@ export class HomeComponent {
       size: 'large',
     },
   ];
+
+  userSubscription!: Subscription;
 
   constructor(private router: Router) {}
 
